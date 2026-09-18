@@ -1,16 +1,38 @@
-# React + Vite
+# React Hooks Playground
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A small, click-around app for learning React hooks by playing with them, not just reading about them. Each card shows a working demo, its live state, and a "peek under the hood" toggle that reveals the exact code driving it.
 
-Currently, two official plugins are available:
+## Run it
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+You'll need [Node.js](https://nodejs.org) installed (any recent version works).
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Then open the URL it prints — usually **http://localhost:5173**.
 
-## Expanding the Oxlint configuration
+That's it. Click things and see what happens.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## What's inside
+
+**`useState`**
+- Button Click Counter — the basics: one value, one setter
+- Total Likes — two state variables updating from one click
+- Shopping Cart — state holding a whole array
+- Form Submit — a controlled input
+
+**`useEffect`**
+- Tab Title Sync — watch your actual browser tab update as a side effect
+- Mount/Unmount Timer — a `setInterval` that gets cleaned up when the component unmounts
+
+**`useRef`**
+- useRef vs useState — click one button and nothing visibly changes; click the other and it does. Shows the core difference: state triggers a re-render, a ref doesn't.
+
+**`useContext`**
+- Theme Context — a component three levels deep reads a value straight from a Provider, no props passed through the components in between
+
+## Editing
+
+Each demo lives in its own file under `src/components/`. Change one, save, and the browser updates instantly (hot reload) — no restart needed.
