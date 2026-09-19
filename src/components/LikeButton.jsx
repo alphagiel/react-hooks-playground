@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import HookCard from './HookCard'
+import { useStickFigure } from '../context/StickFigureContext'
 
 const code = `function LikeButton() {
   const [liked, setLiked] = useState(false)
@@ -20,10 +21,14 @@ const code = `function LikeButton() {
 export default function LikeButton() {
   const [liked, setLiked] = useState(false)
   const [totalLikes, setTotalLikes] = useState(128)
+  const { react, setLikesTotal } = useStickFigure()
 
   function handleClick() {
+    const nextTotal = liked ? totalLikes - 1 : totalLikes + 1
     setLiked(!liked)
-    setTotalLikes(liked ? totalLikes - 1 : totalLikes + 1)
+    setTotalLikes(nextTotal)
+    setLikesTotal(nextTotal)
+    react('card', liked ? 'Unliked' : 'Liked!', nextTotal)
   }
 
   return (

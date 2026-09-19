@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import HookCard from './HookCard'
+import { useStickFigure } from '../context/StickFigureContext'
 
 const code = `function SignupForm() {
   const [name, setName] = useState('')
@@ -25,12 +26,14 @@ const code = `function SignupForm() {
 export default function SignupForm() {
   const [name, setName] = useState('')
   const [submitted, setSubmitted] = useState(null)
+  const { react } = useStickFigure()
 
   function handleSubmit(e) {
     e.preventDefault()
     if (!name.trim()) return
     setSubmitted(name)
     setName('')
+    react('celebrate', `Welcome, ${name}!`)
   }
 
   return (

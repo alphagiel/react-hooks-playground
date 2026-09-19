@@ -1,12 +1,7 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import HookCard from './HookCard'
-import InfoTooltip from './InfoTooltip'
-
-const STATE_EXPLAINER =
-  "You click it, and it tells React 'something changed, redraw the picture.' React redraws everything with the new number, so your eyes see it update right away."
-
-const REF_EXPLAINER =
-  "You click it, and a number sitting in a box changes. Nobody tells React to redraw, so the screen just... doesn't update. The number did change — it's stuck on screen showing the old drawing until something else forces a redraw."
+import RenderFlowDiagram from './RenderFlowDiagram'
+import { useStickFigure } from '../context/StickFigureContext'
 
 const code = `function RefVsState() {
   const [stateCount, setStateCount] = useState(0)
@@ -30,40 +25,90 @@ const code = `function RefVsState() {
   )
 }`
 
+const REF_FLASH_MS = 700
+
 export default function RefVsStateDemo() {
   const [stateCount, setStateCount] = useState(0)
   const refCount = useRef(0)
   const renders = useRef(0)
+  const [pulse, setPulse] = useState(null)
+  const pulseTimer = useRef(null)
+
+  const refBoxRef = useRef(null)
+  const refArrowRef = useRef(null)
+  const wallRef = useRef(null)
+  const refFlashTimer = useRef(null)
+  const { react } = useStickFigure()
 
   renders.current += 1
+
+  function fireStatePulse() {
+    setPulse('state')
+    clearTimeout(pulseTimer.current)
+    pulseTimer.current = setTimeout(() => setPulse(null), REF_FLASH_MS)
+  }
+
+  // Flashes the wall directly via the DOM — no setState, so this
+  // component never re-renders. That's the whole point: the click
+  // registers (the wall glows) but nothing here redraws because of it.
+  function flashRefPath() {
+    ;[refBoxRef, refArrowRef, wallRef].forEach((r) => r.current?.classList.add('flash-bad'))
+    clearTimeout(refFlashTimer.current)
+    refFlashTimer.current = setTimeout(() => {
+      ;[refBoxRef, refArrowRef, wallRef].forEach((r) => r.current?.classList.remove('flash-bad'))
+    }, REF_FLASH_MS)
+  }
 
   return (
     <HookCard
       title="useRef vs useState"
       hook="useRef"
-      blurb="Click 'ref++' a few times — nothing on screen moves. Click 'state++' once and the ref value finally catches up."
+      blurb="Click 'ref++' — the wall glows but the numbers below never move. Every 10th click, watch the stick figure up top: he still reacts, but that's a separate component reacting, not this card re-rendering."
       code={code}
       state={{ stateCount, 'refCount (stale until re-render)': refCount.current, renders: renders.current }}
     >
       <div className="ref-buttons">
-        <span className="btn-with-info">
-          <button className="demo-btn" onClick={() => setStateCount(stateCount + 1)}>
-            state++
-          </button>
-          <InfoTooltip text={STATE_EXPLAINER} />
-        </span>
-        <span className="btn-with-info">
-          <button
-            className="demo-btn ghost"
-            onClick={() => {
-              refCount.current += 1
-            }}
-          >
-            ref++
-          </button>
-          <InfoTooltip text={REF_EXPLAINER} />
-        </span>
+        <button
+          className="demo-btn"
+          onClick={() => {
+            setStateCount(stateCount + 1)
+            fireStatePulse()
+          }}
+        >
+          state++
+        </button>
+        <button
+          className="demo-btn ghost"
+          onClick={() => {
+            refCount.current += 1
+            flashRefPath()
+            // deliberately no setState here — this handler never
+            // triggers a re-render of RefVsStateDemo. But we CAN still
+            // imperatively poke something ELSE on the page (the mascot,
+            // who lives in a different component) without that costing
+            // this component a render.
+            if (refCount.current % 10 === 0) {
+              react(
+                'point',
+                `ref.current hit ${refCount.current} — but the card never redrew to show it!`,
+                <>
+                  {refCount.current}
+                  <br />
+                  ref
+                  <br />
+                  clicks
+                </>,
+                2800
+              )
+            }
+          }}
+        >
+          ref++
+        </button>
       </div>
+
+      <RenderFlowDiagram pulse={pulse} refBoxRef={refBoxRef} refArrowRef={refArrowRef} wallRef={wallRef} />
+
       <div className="ref-readouts">
         <span>state: <strong>{stateCount}</strong></span>
         <span>ref: <strong>{refCount.current}</strong></span>

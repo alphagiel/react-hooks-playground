@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 
-export default function InfoTooltip({ text }) {
+export default function InfoCircle({ text }) {
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef(null)
 
@@ -23,11 +23,11 @@ export default function InfoTooltip({ text }) {
   }, [open])
 
   return (
-    <span className="info-tooltip-wrapper" ref={wrapperRef}>
+    <span className="info-circle-wrapper" ref={wrapperRef}>
       <button
         type="button"
-        className="info-icon"
-        aria-label="More info"
+        className="info-circle"
+        aria-label="Definition"
         onClick={(e) => {
           e.stopPropagation()
           setOpen(!open)
@@ -37,7 +37,7 @@ export default function InfoTooltip({ text }) {
       >
         i
       </button>
-      {open && <span className="info-bubble">{text}</span>}
+      {open && <span className="info-circle-bubble">{text}</span>}
     </span>
   )
 }

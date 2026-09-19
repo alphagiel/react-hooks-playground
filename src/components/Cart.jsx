@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import HookCard from './HookCard'
+import { useStickFigure } from '../context/StickFigureContext'
 
 const PRODUCTS = [
   { id: 1, name: 'Sticker Pack', price: 4 },
@@ -32,13 +33,21 @@ const code = `function Cart() {
 
 export default function Cart() {
   const [items, setItems] = useState([])
+  const { react, setCartTotal } = useStickFigure()
 
   function addItem(product) {
-    setItems([...items, product])
+    const nextItems = [...items, product]
+    setItems(nextItems)
+    const nextTotal = nextItems.reduce((sum, item) => sum + item.price, 0)
+    setCartTotal(nextTotal)
+    react('card', `+ ${product.name}`, `$${nextTotal}`)
   }
 
   function removeItem(index) {
-    setItems(items.filter((_, i) => i !== index))
+    const nextItems = items.filter((_, i) => i !== index)
+    setItems(nextItems)
+    setCartTotal(nextItems.reduce((sum, item) => sum + item.price, 0))
+    react('talk', 'Item removed')
   }
 
   const total = items.reduce((sum, item) => sum + item.price, 0)
