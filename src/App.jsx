@@ -4,6 +4,7 @@ import Cart from './components/Cart'
 import SignupForm from './components/SignupForm'
 import TitleSyncDemo from './components/TitleSyncDemo'
 import TimerCleanupDemo from './components/TimerCleanupDemo'
+import WeatherDemo from './components/WeatherDemo'
 import RefVsStateDemo from './components/RefVsStateDemo'
 import ThemeContextDemo from './components/ThemeContextDemo'
 import StickFigure from './components/StickFigure'
@@ -49,6 +50,7 @@ function App() {
             <main className="card-grid">
               <TitleSyncDemo />
               <TimerCleanupDemo />
+              <WeatherDemo />
             </main>
 
             <section id="hook-ref" className="section-label">

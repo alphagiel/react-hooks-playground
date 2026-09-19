@@ -10,6 +10,7 @@ export function StickFigureProvider({ children }) {
   const [cartTotal, setCartTotal] = useState(0)
   const [likesTotal, setLikesTotal] = useState(128)
   const [clickCount, setClickCount] = useState(0)
+  const [environment, setEnvironment] = useState(null)
   const timerRef = useRef(null)
 
   // holdMs === null means "stay like this until something else changes it"
@@ -51,6 +52,8 @@ export function StickFigureProvider({ children }) {
         setLikesTotal,
         clickCount,
         setClickCount,
+        environment,
+        setEnvironment,
       }}
     >
       {children}

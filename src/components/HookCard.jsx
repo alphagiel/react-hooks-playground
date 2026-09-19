@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-export default function HookCard({ title, hook, blurb, code, state, children }) {
+export default function HookCard({ title, hook, blurb, code, state, children, wide }) {
   const [showCode, setShowCode] = useState(false)
 
   return (
-    <section className="hook-card">
+    <section className={`hook-card ${wide ? 'hook-card-wide' : ''}`}>
       <header className="hook-card-header">
         <div>
           <h2>{title}</h2>

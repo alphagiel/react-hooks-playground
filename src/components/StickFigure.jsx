@@ -1,13 +1,52 @@
 import { useStickFigure } from '../context/StickFigureContext'
 
 const CONFETTI = ['🎉', '✨', '🎊', '⭐']
+const RAINDROPS = [0, 1, 2, 3, 4, 5]
+const SNOWFLAKES = [0, 1, 2, 3, 4, 5]
+const CLOUDS = [
+  { top: '8%', size: '1.6rem', opacity: 0.85, duration: 16, delay: 0 },
+  { top: '22%', size: '1.1rem', opacity: 0.7, duration: 12, delay: -4 },
+  { top: '4%', size: '0.9rem', opacity: 0.6, duration: 20, delay: -9 },
+  { top: '30%', size: '1.3rem', opacity: 0.75, duration: 14, delay: -2 },
+  { top: '15%', size: '1rem', opacity: 0.55, duration: 18, delay: -13 },
+]
 
 export default function StickFigure() {
-  const { mood, message, cardValue, theme, cartTotal, likesTotal, clickCount } = useStickFigure()
+  const { mood, message, cardValue, theme, cartTotal, likesTotal, clickCount, environment } =
+    useStickFigure()
 
   return (
     <div className="stick-figure-stage-wrap">
       <div className={`stick-figure-stage ${theme === 'dark' ? 'theme-dark' : ''}`}>
+        {environment && (
+          <div className={`weather-overlay weather-${environment}`}>
+            {environment === 'rainy' &&
+              RAINDROPS.map((i) => <span key={i} className={`raindrop drop-${i}`} />)}
+            {environment === 'snowy' &&
+              SNOWFLAKES.map((i) => (
+                <span key={i} className={`snowflake flake-${i}`}>
+                  ❆
+                </span>
+              ))}
+            {environment === 'cloudy' &&
+              CLOUDS.map((c, i) => (
+                <span
+                  key={i}
+                  className="weather-cloud"
+                  style={{
+                    top: c.top,
+                    fontSize: c.size,
+                    opacity: c.opacity,
+                    animationDuration: `${c.duration}s`,
+                    animationDelay: `${c.delay}s`,
+                  }}
+                >
+                  ☁️
+                </span>
+              ))}
+          </div>
+        )}
+
         <div className="stick-figure-frame">
           {message && <div className={`stick-bubble mood-${mood}`}>{message}</div>}
 
