@@ -11,6 +11,8 @@ const initialState = {
   likesTotal: 128,
   clickCount: 0,
   environment: null,
+  weatherTemp: null,
+  weatherLabel: null,
 }
 
 // Every way the mascot's state can change funnels through this one
@@ -33,6 +35,8 @@ function stickFigureReducer(state, action) {
       return { ...state, clickCount: action.value }
     case 'SET_ENVIRONMENT':
       return { ...state, environment: action.value }
+    case 'SET_WEATHER_INFO':
+      return { ...state, weatherTemp: action.temp, weatherLabel: action.label }
     default:
       return state
   }
@@ -64,6 +68,10 @@ export function StickFigureProvider({ children }) {
   const setLikesTotal = useCallback((value) => dispatch({ type: 'SET_LIKES_TOTAL', value }), [])
   const setClickCount = useCallback((value) => dispatch({ type: 'SET_CLICK_COUNT', value }), [])
   const setEnvironment = useCallback((value) => dispatch({ type: 'SET_ENVIRONMENT', value }), [])
+  const setWeatherInfo = useCallback(
+    (temp, label) => dispatch({ type: 'SET_WEATHER_INFO', temp, label }),
+    []
+  )
 
   return (
     <StickFigureContext.Provider
@@ -76,6 +84,7 @@ export function StickFigureProvider({ children }) {
         setLikesTotal,
         setClickCount,
         setEnvironment,
+        setWeatherInfo,
       }}
     >
       {children}

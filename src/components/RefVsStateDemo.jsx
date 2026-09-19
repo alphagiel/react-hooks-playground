@@ -71,8 +71,10 @@ export default function RefVsStateDemo() {
         <button
           className="demo-btn"
           onClick={() => {
-            setStateCount(stateCount + 1)
+            const next = stateCount + 1
+            setStateCount(next)
             fireStatePulse()
+            react('wave', `state is ${next} now`)
           }}
         >
           state++

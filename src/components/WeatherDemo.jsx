@@ -5,7 +5,7 @@ import { useStickFigure } from '../context/StickFigureContext'
 // Open-Meteo needs no API key — good for a demo. Hardcoded to New York
 // so the fetch URL is simple; no geolocation permission needed.
 const CITY = { label: 'New York', lat: 40.71, lon: -74.01 }
-const WEATHER_URL = `https://api.open-meteo.com/v1/forecast?latitude=${CITY.lat}&longitude=${CITY.lon}&hourly=temperature_2m,weathercode&timezone=auto&forecast_days=1`
+const WEATHER_URL = `https://api.open-meteo.com/v1/forecast?latitude=${CITY.lat}&longitude=${CITY.lon}&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&timezone=auto&forecast_days=1`
 
 // WMO weather codes -> one of our 4 environments
 function codeToCondition(code) {
@@ -63,7 +63,7 @@ export default function WeatherDemo() {
   const [hours, setHours] = useState([])
   const [status, setStatus] = useState('loading')
   const [selectedIndex, setSelectedIndex] = useState(null)
-  const { react, setEnvironment } = useStickFigure()
+  const { react, setEnvironment, setWeatherInfo } = useStickFigure()
 
   useEffect(() => {
     const controller = new AbortController()
@@ -89,6 +89,7 @@ export default function WeatherDemo() {
         if (nowHour) {
           setSelectedIndex(nowIndex)
           setEnvironment(codeToCondition(nowHour.code))
+          setWeatherInfo(nowHour.temp, CONDITION_META[codeToCondition(nowHour.code)].label)
         }
       })
       .catch((err) => {
@@ -104,7 +105,8 @@ export default function WeatherDemo() {
     const condition = codeToCondition(hour.code)
     const meta = CONDITION_META[condition]
     setEnvironment(condition)
-    react('talk', `${formatHour(hour.time)}: ${hour.temp}°C, ${meta.label} ${meta.emoji}`, null, 3200)
+    setWeatherInfo(hour.temp, meta.label)
+    react('talk', `${formatHour(hour.time)}: ${hour.temp}°F, ${meta.label} ${meta.emoji}`, null, 3200)
   }
 
   return (
