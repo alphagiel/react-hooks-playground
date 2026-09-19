@@ -78,6 +78,18 @@ export default function WeatherDemo() {
         }))
         setHours(parsed)
         setStatus('ready')
+
+        // Default to right now: snap to the nearest 3-hour bucket we
+        // actually show as a button, so the highlighted pick lines up
+        // with reality the instant the data loads — no click needed.
+        const currentHour = new Date().getHours()
+        const nearestBucket = Math.min(21, Math.round(currentHour / 3) * 3)
+        const nowIndex = Math.min(nearestBucket, parsed.length - 1)
+        const nowHour = parsed[nowIndex]
+        if (nowHour) {
+          setSelectedIndex(nowIndex)
+          setEnvironment(codeToCondition(nowHour.code))
+        }
       })
       .catch((err) => {
         if (err.name !== 'AbortError') setStatus('error')
@@ -99,7 +111,7 @@ export default function WeatherDemo() {
     <HookCard
       title="Live Weather (real API)"
       hook="useEffect"
-      blurb={`Fetched once on mount from a real API — Open-Meteo, ${CITY.label}. Click an hour: the stick figure's weather changes to match.`}
+      blurb={`Fetched once on mount from a real API — Open-Meteo, ${CITY.label}. Defaults to right now; click any hour to change it.`}
       code={code}
       state={{ status, hoursLoaded: hours.length, selectedIndex }}
       wide

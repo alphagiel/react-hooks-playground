@@ -4,11 +4,16 @@ const CONFETTI = ['🎉', '✨', '🎊', '⭐']
 const RAINDROPS = [0, 1, 2, 3, 4, 5]
 const SNOWFLAKES = [0, 1, 2, 3, 4, 5]
 const CLOUDS = [
-  { top: '8%', size: '1.6rem', opacity: 0.85, duration: 16, delay: 0 },
-  { top: '22%', size: '1.1rem', opacity: 0.7, duration: 12, delay: -4 },
-  { top: '4%', size: '0.9rem', opacity: 0.6, duration: 20, delay: -9 },
-  { top: '30%', size: '1.3rem', opacity: 0.75, duration: 14, delay: -2 },
-  { top: '15%', size: '1rem', opacity: 0.55, duration: 18, delay: -13 },
+  { top: '8%', size: '2.6rem', opacity: 0.85, duration: 16, delay: 0 },
+  { top: '22%', size: '1.9rem', opacity: 0.7, duration: 12, delay: -4 },
+  { top: '4%', size: '1.6rem', opacity: 0.6, duration: 20, delay: -9 },
+  { top: '30%', size: '2.2rem', opacity: 0.75, duration: 14, delay: -2 },
+  { top: '15%', size: '1.8rem', opacity: 0.55, duration: 18, delay: -13 },
+  { top: '11%', size: '2.1rem', opacity: 0.65, duration: 15, delay: -7 },
+  { top: '26%', size: '1.7rem', opacity: 0.6, duration: 22, delay: -17 },
+  { top: '2%', size: '1.5rem', opacity: 0.5, duration: 19, delay: -3 },
+  { top: '34%', size: '2rem', opacity: 0.7, duration: 13, delay: -10 },
+  { top: '18%', size: '1.6rem', opacity: 0.55, duration: 17, delay: -1 },
 ]
 
 export default function StickFigure() {
